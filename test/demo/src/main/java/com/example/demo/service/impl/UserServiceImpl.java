@@ -33,4 +33,14 @@ public class UserServiceImpl implements UserService {
     public User getLastRegisteredUser() {
         return userRepository.findFirstByOrderByUidDesc();
     }
+
+    public boolean isUsernameUnique(String username) {
+        User user = userRepository.findByName(username);
+        return user == null;
+    }
+
+    public User findUserByName(String name) {
+        return userRepository.findByName(name);
+    }
+    
 }

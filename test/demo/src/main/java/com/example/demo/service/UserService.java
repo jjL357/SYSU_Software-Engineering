@@ -13,4 +13,11 @@ public interface UserService {
     User findUserByNameAndPassword(String name, String password);
 
     User getLastRegisteredUser();
+
+    boolean isUsernameUnique(String username) ;
+
+    public User findUserByName(String name);
+    
+
+    
 }

@@ -23,6 +23,11 @@ public class RegisterController {
 
     @PostMapping("/register")
     public String registerSubmit(@ModelAttribute User user, Model model) {
+        if (!userService.isUsernameUnique(user.getName())) {
+            model.addAttribute("usernameExists", true);
+            return "register";
+        }
+
         userService.saveUser(user);
         User lastRegisteredUser = userService.getLastRegisteredUser();
         model.addAttribute("lastRegisteredUser", lastRegisteredUser);

@@ -84,16 +84,26 @@
         .login-link:hover {
             text-decoration: underline;
         }
+
+        .error-message {
+            color: red;
+            font-size: 14px;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
 
 <div class="register-container">
     <h2 id="register-title">音乐网站注册</h2>
+
     <form action="/register" method="post" th:object="${user}">
         <div class="container">
             <label for="name"><b>用户名</b></label>
             <input type="text" placeholder="输入用户名" th:field="*{name}" required>
+            
+            <!-- 显示用户名已存在的错误信息 -->
+            <p th:if="${usernameExists}" class="error-message">该用户名已存在，请选择其他用户名。</p>
 
             <label for="email"><b>邮箱</b></label>
             <input type="email" placeholder="输入邮箱" th:field="*{email}" required>
