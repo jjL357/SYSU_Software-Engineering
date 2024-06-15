@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>注册成功</title>
+</head>
+<body>
+    <h2>注册成功</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>用户名</th>
+                <th>邮箱</th>
+                <th>头像</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="user : ${users}">
+                <td th:text="${user.name}"></td>
+                <td th:text="${user.email}"></td>
+                <td th:text="${user.avatar}"></td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

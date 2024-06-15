@@ -89,6 +89,11 @@
             <button type="submit">登录</button>
         </div>
     </form>
+
+    <!-- 显示错误信息 -->
+    <div th:if="${error}">
+        <p th:text="${error}" style="color: red;"></p>
+    </div>
 </div>
 
 </body>

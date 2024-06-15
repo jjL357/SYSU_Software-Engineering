@@ -78,16 +78,16 @@
 
 <div class="register-container">
     <h2 id="register-title">音乐网站注册</h2>
-    <form action="/register" method="post">
+    <form action="/register" method="post" th:object="${user}">
         <div class="container">
-            <label for="uname"><b>用户名</b></label>
-            <input type="text" placeholder="输入用户名" name="uname" required>
+            <label for="name"><b>用户名</b></label>
+            <input type="text" placeholder="输入用户名" th:field="*{name}" required>
 
             <label for="email"><b>邮箱</b></label>
-            <input type="email" placeholder="输入邮箱" name="email" required>
+            <input type="email" placeholder="输入邮箱" th:field="*{email}" required>
 
-            <label for="psw"><b>密码</b></label>
-            <input type="password" placeholder="输入密码" name="psw" required>
+            <label for="password"><b>密码</b></label>
+            <input type="password" placeholder="输入密码" th:field="*{password}" required>
 
             <button type="submit">注册</button>
         </div>
