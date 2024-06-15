@@ -3,24 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <title>注册成功</title>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #000; /* Fallback background color */
+            color: white; /* Fallback text color */
+            background-image: url('/image/1.jpg'); /* Background image */
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .register-success-container {
+            text-align: center;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 40px;
+            border-radius: 10px;
+            color: white;
+            box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.75);
+            width: 80%;
+            max-width: 600px;
+        }
+
+        .register-success-container h2 {
+            margin-bottom: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .container {
+            padding: 16px;
+            text-align: left;
+        }
+    </style>
 </head>
 <body>
+
+<div class="register-success-container">
     <h2>注册成功</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>用户名</th>
-                <th>邮箱</th>
-                <th>头像</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="user : ${users}">
-                <td th:text="${user.name}"></td>
-                <td th:text="${user.email}"></td>
-                <td th:text="${user.avatar}"></td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="container">
+        <p>以下是您刚刚注册的用户信息：</p>
+        <p>用户名： <span th:text="${lastRegisteredUser.name}"></span></p>
+        <p>邮箱： <span th:text="${lastRegisteredUser.email}"></span></p>
+        <a href="/login" class="login-link">点击这里登录</a>
+    </div>
+</div>
+
 </body>
 </html>

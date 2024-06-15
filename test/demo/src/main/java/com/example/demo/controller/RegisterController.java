@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import java.util.List;
-
 @Controller
 public class RegisterController {
 
@@ -24,15 +22,17 @@ public class RegisterController {
     }
 
     @PostMapping("/register")
-    public String registerSubmit(@ModelAttribute User user) {
+    public String registerSubmit(@ModelAttribute User user, Model model) {
         userService.saveUser(user);
+        User lastRegisteredUser = userService.getLastRegisteredUser();
+        model.addAttribute("lastRegisteredUser", lastRegisteredUser);
         return "redirect:/registerSuccess";
     }
 
     @GetMapping("/registerSuccess")
     public String registerSuccess(Model model) {
-        List<User> users = userService.getAllUsers();
-        model.addAttribute("users", users);
+        User lastRegisteredUser = userService.getLastRegisteredUser();
+        model.addAttribute("lastRegisteredUser", lastRegisteredUser);
         return "registerSuccess";
     }
 }

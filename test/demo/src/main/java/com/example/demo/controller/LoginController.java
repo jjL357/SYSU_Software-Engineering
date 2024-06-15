@@ -1,5 +1,8 @@
 package com.example.demo.controller;
 
+import com.example.demo.model.User;
+import com.example.demo.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -8,6 +11,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class LoginController {
+
+    @Autowired
+    private UserService userService;
 
     @GetMapping("/login")
     public String login() {
@@ -18,9 +24,8 @@ public class LoginController {
     public String loginSubmit(@RequestParam String uname,
                               @RequestParam String psw,
                               Model model) {
-        // 这里你需要实现验证逻辑，验证用户名和密码
-        // 假设这里直接做一个简单的验证
-        if ("name".equals(uname) && "password".equals(psw)) {
+        User user = userService.findUserByNameAndPassword(uname, psw);
+        if (user != null) {
             return "redirect:/loginSuccess"; // 登录成功重定向到登录成功页面
         } else {
             model.addAttribute("error", "用户名或密码不正确，请重试。");

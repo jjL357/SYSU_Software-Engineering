@@ -72,6 +72,23 @@
         .container {
             padding: 16px;
         }
+
+        .error-message {
+            color: red;
+            margin-bottom: 10px;
+        }
+
+        .register-link {
+            margin-top: 10px;
+            font-size: 14px;
+            text-decoration: none;
+            color: lightblue;
+            display: block;
+        }
+
+        .register-link:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
@@ -80,6 +97,9 @@
     <h2 id="login-title">音乐网站登录</h2>
     <form action="/login" method="post">
         <div class="container">
+            <!-- 显示错误信息 -->
+            <div th:if="${error}" class="error-message" th:text="${error}"></div>
+
             <label for="uname"><b>用户名</b></label>
             <input type="text" placeholder="输入用户名" name="uname" required>
 
@@ -87,13 +107,10 @@
             <input type="password" placeholder="输入密码" name="psw" required>
 
             <button type="submit">登录</button>
+
+            <a href="/register" class="register-link">没有账号？点击这里注册</a>
         </div>
     </form>
-
-    <!-- 显示错误信息 -->
-    <div th:if="${error}">
-        <p th:text="${error}" style="color: red;"></p>
-    </div>
 </div>
 
 </body>

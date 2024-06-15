@@ -9,4 +9,8 @@ public interface UserService {
     List<User> getAllUsers();
 
     User saveUser(User user);
+
+    User findUserByNameAndPassword(String name, String password);
+
+    User getLastRegisteredUser();
 }

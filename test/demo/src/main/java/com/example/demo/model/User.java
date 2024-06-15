@@ -1,23 +1,26 @@
 package com.example.demo.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
+@Table(name = "users")
 public class User {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long uid;
 
+    @Column(nullable = false)
     private String name;
-    private String email;
-    private String avatar;
+
+    @Column(nullable = false)
     private String password;
 
-    // Getters and setters
+    @Column(nullable = false)
+    private String email;
+
+    private String avatar;
+
+    // getters and setters
 
     public Long getUid() {
         return uid;
@@ -35,6 +38,14 @@ public class User {
         this.name = name;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public String getEmail() {
         return email;
     }
@@ -49,13 +60,5 @@ public class User {
 
     public void setAvatar(String avatar) {
         this.avatar = avatar;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 }

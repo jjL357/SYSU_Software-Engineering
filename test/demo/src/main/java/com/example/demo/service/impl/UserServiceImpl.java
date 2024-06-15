@@ -23,4 +23,14 @@ public class UserServiceImpl implements UserService {
     public User saveUser(User user) {
         return userRepository.save(user);
     }
+
+    @Override
+    public User findUserByNameAndPassword(String name, String password) {
+        return userRepository.findByNameAndPassword(name, password);
+    }
+
+    @Override
+    public User getLastRegisteredUser() {
+        return userRepository.findFirstByOrderByUidDesc();
+    }
 }
