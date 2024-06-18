@@ -42,5 +42,9 @@ public class UserServiceImpl implements UserService {
     public User findUserByName(String name) {
         return userRepository.findByName(name);
     }
-    
+
+    public void updateUser(User user) {
+        // 更新用户信息的代码
+        userRepository.save(user);
+    }
 }

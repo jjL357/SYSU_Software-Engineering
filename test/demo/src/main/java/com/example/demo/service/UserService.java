@@ -17,7 +17,7 @@ public interface UserService {
     boolean isUsernameUnique(String username) ;
 
     public User findUserByName(String name);
-    
 
-    
+    public void updateUser(User user) ;
+        
 }
