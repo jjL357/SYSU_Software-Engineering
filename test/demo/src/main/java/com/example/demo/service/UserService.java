@@ -19,5 +19,7 @@ public interface UserService {
     public User findUserByName(String name);
 
     public void updateUser(User user) ;
+
+    public User findUserByUid(Long uid) ;
         
 }

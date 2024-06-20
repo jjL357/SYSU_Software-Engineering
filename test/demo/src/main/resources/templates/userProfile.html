@@ -18,6 +18,15 @@
             align-items: center;
         }
 
+        .container {
+            display: flex;
+            max-width: 1200px;
+            width: 100%;
+            margin: 20px;
+            flex: 1;
+            overflow: hidden;
+        }
+
         .profile-container {
             text-align: center;
             background-color: rgba(0, 0, 0, 0.8);
@@ -25,8 +34,7 @@
             border-radius: 10px;
             color: white;
             box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.75);
-            width: 80%;
-            max-width: 600px;
+            width: 40%;
             animation: fadeIn 1s ease-in-out;
         }
 
@@ -45,8 +53,8 @@
         .profile-container img {
             border-radius: 50%;
             margin-bottom: 20px;
-            width: 150px;
-            height: 150px;
+            width: 250px;
+            height: 250px;
             object-fit: cover;
             border: 2px solid #fff;
         }
@@ -122,15 +130,67 @@
             }
         }
 
-        .form-button-container {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
+        .posts-container {
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 40px;
+            border-radius: 10px;
+            color: white;
+            box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.75);
+            flex: 1;
+            animation: fadeIn 1s ease-in-out;
+            margin-left: 20px;
+            overflow-y: auto;
         }
 
-        .form-button-container button,
-        .form-button-container a {
-            flex: 1;
+        .posts-container h2 {
+            margin-bottom: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .post-item {
+            border-bottom: 1px solid #ddd;
+            padding: 10px 0;
+            position: relative;
+        }
+
+        .post-item:last-child {
+            border-bottom: none;
+        }
+
+        .post-item h3 {
+            margin: 0;
+            font-size: 20px;
+            color: #ff4b5c;
+        }
+
+        .post-item p {
+            margin: 5px 0 0;
+            color: #ccc;
+        }
+
+        .post-images {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        .post-images img {
+            width: 100px;
+            height: 100px;
+            margin: 5px;
+            object-fit: cover;
+        }
+
+        .image-path {
+            width: 100%;
+            text-align: center;
+            font-size: 12px;
+            color: #888;
+            margin-top: 5px;
         }
 
         .centered-text {
@@ -138,39 +198,101 @@
             justify-content: center;
             align-items: center;
         }
+
+        .all-posts-container {
+            width: 80%;
+            max-width: 1200px;
+            margin: 20px;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: rgba(255, 255, 255, 0.8);
+            box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.1);
+        }
+
+        .all-posts-container h2 {
+            margin-bottom: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .all-post-item {
+            border-bottom: 1px solid #ddd;
+            padding: 10px 0;
+            position: relative;
+        }
+
+        .all-post-item:last-child {
+            border-bottom: none;
+        }
+
+        .all-post-item h3 {
+            margin: 0;
+            font-size: 20px;
+            color: #ff4b5c;
+        }
+
+        .all-post-item p {
+            margin: 5px 0 0;
+            color: #ccc;
+        }
+
+        .all-post-images {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        .all-post-images img {
+            width: 100px;
+            height: 100px;
+            margin: 5px;
+            object-fit: cover;
+        }
+
+        .all-image-path {
+            width: 100%;
+            text-align: center;
+            font-size: 12px;
+            color: #888;
+            margin-top: 5px;
+        }
     </style>
 </head>
 <body>
 
-<div class="profile-container">
-    <img th:src="${user.avatar != null ? '/avatar/' + user.avatar : '/avatar/0.jpg'}" alt="User Avatar">
-    <h2 id="profile-title">Welcome, <span th:text="${user.name}"></span></h2>
-    <p>Username: <span th:text="${user.name}"></span></p>
-    <p>Email: <span th:text="${user.email}"></span></p>
+<div class="container">
+    <div class="profile-container">
+        <img th:src="${user.avatar != null ? '/avatar/' + user.avatar : '/avatar/0.jpg'}" alt="User Avatar">
+        <h2 id="profile-title">Welcome, <span th:text="${user.name}"></span></h2>
+        <p>Username: <span th:text="${user.name}"></span></p>
+        <p>Email: <span th:text="${user.email}"></span></p>
 
-    <form id="avatarForm" action="/uploadAvatar" method="post" enctype="multipart/form-data">
-        <div class="form-button-container">
-            <div class="upload-input">
-                <input type="file" name="avatar" accept="image/*" required onchange="document.getElementById('avatarForm').submit();">
-                <label class="centered-text">Choose and Upload Avatar</label>
+        <form id="avatarForm" action="/uploadAvatar" method="post" enctype="multipart/form-data">
+            <div class="form-button-container">
+                <div class="upload-input">
+                    <input type="file" name="avatar" accept="image/*" required onchange="document.getElementById('avatarForm').submit();">
+                    <label class="centered-text">上传并更换头像</label>
+                </div>
             </div>
-        </div>
-    </form>
+        </form>
 
-    <div class="form-button-container">
-        <a href="/login" class="button">Logout</a>
+        <div class="form-button-container">
+            <a href="/createPost" class="button">发帖</a>
+            <a href="/myPosts" class="button">查看我的帖子</a>
+            <a href="/login" class="button">Logout</a>
+        </div>
+    </div>
+
+    <div class="posts-container">
+        <h2>所有帖子</h2>
+        <div th:each="post, postIndex : ${posts}" class="post-item">
+            <h3><a th:href="@{/post/{postId}(postId=${post.postId})}" th:text="${post.title}">Post Title</a></h3>            
+        </div>
+        <hr/>
     </div>
 </div>
-
-<script>
-    // Refresh page after avatar upload
-    const avatarForm = document.getElementById('avatarForm');
-    if (avatarForm) {
-        avatarForm.addEventListener('submit', function() {
-            location.reload();
-        });
-    }
-</script>
-
 </body>
 </html>
