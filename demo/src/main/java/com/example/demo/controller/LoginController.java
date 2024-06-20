@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.model.Post;
 import com.example.demo.model.User;
 import com.example.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,17 +11,21 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
-
+import com.example.demo.service.PostService;
 import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.List;
 
 @Controller
 public class LoginController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private PostService postService;
 
     @GetMapping("/login")
     public String login() {
@@ -45,6 +50,8 @@ public class LoginController {
     @GetMapping("/userProfile")
     public String userProfile(Model model, HttpSession session) {
         User user = (User) session.getAttribute("user");
+        List<Post> posts = postService.getAllPosts();
+        model.addAttribute("posts", posts);
         if (user != null) {
             model.addAttribute("user", user);
             return "userProfile";

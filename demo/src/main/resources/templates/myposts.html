@@ -51,8 +51,9 @@
             padding: 10px 0;
             position: relative;
             display: flex; /* Display flex for proper alignment */
-            justify-content: space-between; /* Space between title and delete button */
-            align-items: center; /* Center items vertically */
+            flex-direction: column; /* Stack items vertically */
+            align-items: center; /* Center items horizontally */
+            margin-bottom: 20px; /* Add margin between each post item */
         }
 
         .post-item:last-child {
@@ -64,11 +65,13 @@
             font-size: 20px;
             color: #ff4b5c;
             text-align: center; /* Center align the title */
+            margin-bottom: 10px; /* Add margin below title */
         }
 
         .post-item p {
-            margin: 5px 0 0;
+            margin: 10px 0; /* Add margin top and bottom */
             color: #ccc;
+            text-align: center; /* Center align the content */
         }
 
         .post-images {
@@ -94,16 +97,11 @@
             margin-top: 5px;
         }
 
-        .centered-text {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
         .button-container {
             display: flex;
             justify-content: center;
             align-items: center;
+            margin-top: 10px; /* Add margin at the top of the button container */
         }
 
         .button {
@@ -133,17 +131,19 @@
             <h3 th:text="${post.title}" class="centered-text">Post Title</h3>
             
             <p th:text="${post.content}">Post Content</p>
+            
             <div class="post-images" th:if="${postPhotos.containsKey(post.postId) and #lists.size(postPhotos.get(post.postId)) > 0}">
                 <div th:each="photo : ${postPhotos.get(post.postId)}">
                     <img th:src="@{/posts_photos/{postId}/{photo}(postId=${post.postId}, photo=${photo})}" alt="Post Image" />
                 </div>
             </div>
+            
             <div class="image-path" th:unless="${postPhotos.containsKey(post.postId)}">No Images</div>
             
             <!-- Delete button -->
             <div class="button-container">
                 <form th:action="@{/deletePost/{postId}(postId=${post.postId})}" method="post">
-                    <button type="submit" class="button" onclick="return confirm('确认删除该帖子？');">删除</button>
+                    <button type="submit" class="button" onclick="return confirm('确认删除该帖子？');">删除该帖</button>
                 </form>
             </div>
         </div>

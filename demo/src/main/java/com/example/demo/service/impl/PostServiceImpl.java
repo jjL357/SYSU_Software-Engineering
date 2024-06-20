@@ -34,4 +34,7 @@ public class PostServiceImpl implements PostService {
         return postRepository.findByPostId(postId);
     }
     
+    public List<Post> getAllPosts() {
+        return postRepository.findAll();
+    }
 }

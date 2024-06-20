@@ -47,4 +47,9 @@ public class UserServiceImpl implements UserService {
         // 更新用户信息的代码
         userRepository.save(user);
     }
+
+
+    public User findUserByUid(Long uid) {
+        return userRepository.findByUid(uid);
+    }
 }

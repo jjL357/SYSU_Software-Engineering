@@ -3,6 +3,8 @@ package com.example.demo.controller;
 import com.example.demo.model.Post;
 import com.example.demo.model.User;
 import com.example.demo.service.PostService;
+import com.example.demo.service.UserService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,6 +35,9 @@ public class PostController {
 
     @Autowired
     private PostService postService;
+
+    @Autowired
+    private UserService userService;
 
     private static final String UPLOAD_DIR = "src/main/resources/static/posts_photos";
 
@@ -143,7 +148,7 @@ public class PostController {
 
         // Delete post and related photos
         postService.deletePost(postId);
-        //deletePostPhotos(postId);
+        deletePostPhotos(postId);
 
         model.addAttribute("message", "帖子删除成功！");
         return "redirect:/myPosts";
@@ -161,5 +166,40 @@ public class PostController {
             postFolder.delete();
         }
     }
+
+    @GetMapping("/post/{postId}")
+    public String viewPost(@PathVariable Integer postId, Model model) {
+        Post post = postService.getPostByPostId(postId);
+        if (post == null) {
+            return "redirect:/error"; // 处理帖子不存在的情况
+        }
+    
+        Long authorId = post.getAuthorId();
+        User user = userService.findUserByUid(authorId); // 确保 UserService 有这个方法
+        if (user == null) {
+            return "redirect:/error"; // 处理用户不存在的情况
+        }
+    
+        model.addAttribute("user", user);
+        model.addAttribute("post", post);
+    
+        // 构造帖子的图片路径 Map
+        Map<Integer, List<String>> postPhotos = new HashMap<>();
+        List<String> photos = new ArrayList<>();
+        File postFolder = new File(UPLOAD_DIR + File.separator + post.getPostId());
+        if (postFolder.exists() && postFolder.isDirectory()) {
+            File[] files = postFolder.listFiles();
+            if (files != null) {
+                for (File file : files) {
+                    photos.add(file.getName());
+                }
+            }
+        }
+        postPhotos.put(post.getPostId(), photos);
+        model.addAttribute("postPhotos", postPhotos);
+    
+        return "postDetail";
+    }
+    
 
 }

@@ -21,6 +21,7 @@ public interface  PostService {
     public void deletePost(Integer postId);
 
     public Post getPostByPostId(Integer postid);
+    public List<Post> getAllPosts();
     
 }
 

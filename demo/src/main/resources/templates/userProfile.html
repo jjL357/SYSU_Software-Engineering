@@ -21,10 +21,10 @@
         .container {
             display: flex;
             max-width: 1200px;
-            width: 100%; /* Ensure it takes full width */
+            width: 100%;
             margin: 20px;
             flex: 1;
-            overflow: hidden; /* Prevent content overflow on smaller screens */
+            overflow: hidden;
         }
 
         .profile-container {
@@ -34,7 +34,7 @@
             border-radius: 10px;
             color: white;
             box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.75);
-            width: 40%; /* Adjusted width */
+            width: 40%;
             animation: fadeIn 1s ease-in-out;
         }
 
@@ -53,8 +53,8 @@
         .profile-container img {
             border-radius: 50%;
             margin-bottom: 20px;
-            width: 250px; /* Adjusted size */
-            height: 250px; /* Adjusted size */
+            width: 250px;
+            height: 250px;
             object-fit: cover;
             border: 2px solid #fff;
         }
@@ -136,10 +136,10 @@
             border-radius: 10px;
             color: white;
             box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.75);
-            flex: 1; /* Take up remaining space */
+            flex: 1;
             animation: fadeIn 1s ease-in-out;
-            margin-left: 20px; /* Adjusted margin to create separation */
-            overflow-y: auto; /* Allow for scrolling */
+            margin-left: 20px;
+            overflow-y: auto;
         }
 
         .posts-container h2 {
@@ -274,7 +274,7 @@
             <div class="form-button-container">
                 <div class="upload-input">
                     <input type="file" name="avatar" accept="image/*" required onchange="document.getElementById('avatarForm').submit();">
-                    <label class="centered-text">Choose and Upload Avatar</label>
+                    <label class="centered-text">上传并更换头像</label>
                 </div>
             </div>
         </form>
@@ -289,19 +289,10 @@
     <div class="posts-container">
         <h2>所有帖子</h2>
         <div th:each="post, postIndex : ${posts}" class="post-item">
-            <h3 th:text="${post.title}">Post Title</h3>
-            <p>作者: <span th:text="${post.authorId}"></span></p>
-            <p>发布时间: <span th:text="${#temporals.format(post.createTime, 'yyyy-MM-dd HH:mm')}"></span></p>
-            <p th:text="${post.content}">Post Content</p>
-            <div class="post-images" th:if="${postPhotos.containsKey(post.postId) and #lists.size(postPhotos.get(post.postId)) > 0}">
-                <div th:each="photo : ${postPhotos.get(post.postId)}">
-                    <img th:src="@{/posts_photos/{p}/{photo}(p=${post.postId}, photo=${photo})}" alt="Post Image" />
-                </div>
-            </div>
-            <div class="image-path" th:unless="${postPhotos.containsKey(post.postId)}">No Images</div>
+            <h3><a th:href="@{/post/{postId}(postId=${post.postId})}" th:text="${post.title}">Post Title</a></h3>            
         </div>
         <hr/>
     </div>
 </div>
-</div>
 </body>
+</html>
