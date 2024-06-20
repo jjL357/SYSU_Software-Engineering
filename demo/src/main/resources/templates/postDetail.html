@@ -87,7 +87,7 @@
             background-color: #ff4b5c;
             color: white;
             padding: 16px 20px;
-            border: none;
+            border: none; /* Remove button border */
             cursor: pointer;
             width: 100%;
             border-radius: 4px;
@@ -98,10 +98,19 @@
             text-align: center;
             margin-top: 10px;
             box-sizing: border-box;
+            outline: none; /* Remove outline on focus */
         }
 
         .button:hover {
             opacity: 0.8;
+        }
+
+        .like-button {
+            background-color: #4CAF50;
+        }
+
+        .like-button:hover {
+            background-color: #45a049;
         }
 
         @keyframes fadeIn {
@@ -119,8 +128,8 @@
 <div class="container">
     <h2 th:text="${post.title}">Post Title</h2>
     <div class="author-info">
-        <img th:src="@{'/avatar/' + ${user.avatar}}" alt="User Avatar">
-        <span>作者: <span th:text="${user.name}">Author Name</span></span>
+        <img th:src="@{'/avatar/' + ${author.avatar}}" alt="Author Avatar">
+        <span>作者: <span th:text="${author.name}">Author Name</span></span>
     </div>
     <div class="post-content">
         <strong>内容:</strong>
@@ -133,9 +142,25 @@
             </a>
         </div>
     </div>
+    <p>点赞数: <span id="likeCount" th:text="${likeCount}">0</span></p> <!-- 显示点赞数 -->
+    <div th:if="${likedByUser}">
+        <div class="button like-button">
+            <form th:action="@{/processLikes/{postId}/{uid}(postId=${post.postId}, uid=${user.uid})}" method="post">
+                <button type="submit" style="border: none;">已点赞</button>
+            </form>
+        </div>
+    </div>
+    <div th:unless="${likedByUser}">
+        <div class="button">
+            <form th:action="@{/processLikes/{postId}/{uid}(postId=${post.postId}, uid=${user.uid})}" method="post">
+                <button type="submit">点赞</button>
+            </form>
+        </div>
+    </div>
     <a href="/userProfile" class="button">返回</a>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js"></script>
+
 </body>
 </html>

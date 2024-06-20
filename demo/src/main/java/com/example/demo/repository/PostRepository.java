@@ -12,4 +12,5 @@ import java.util.List;
 public interface PostRepository extends JpaRepository<Post, Integer> {
     List<Post> findByAuthorId(Long authorId);
     Post findByPostId(Integer postId);
+    
 }

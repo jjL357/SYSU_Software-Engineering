@@ -128,7 +128,7 @@
     <div class="posts-container">
         <h2>我的帖子</h2>
         <div th:each="post, postIndex : ${posts}" class="post-item">
-            <h3 th:text="${post.title}" class="centered-text">Post Title</h3>
+            <a th:href="@{/post/{postId}/{userid}(postId=${post.postId},userid=${user.uid})}" th:text="${post.title}" class="centered-text post-title">Post Title</a>
             
             <p th:text="${post.content}">Post Content</p>
             

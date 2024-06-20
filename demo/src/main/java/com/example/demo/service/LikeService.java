@@ -9,35 +9,20 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-public class LikeService {
+public interface  LikeService {
 
-    private final LikeRepository likeRepository;
+   
+    public void likePost(Long userId, Long postId);
 
-    @Autowired
-    public LikeService(LikeRepository likeRepository) {
-        this.likeRepository = likeRepository;
-    }
+   
+    public void unlikePost(Long userId, Long postId) ;
 
-    @Transactional
-    public void likePost(Long userId, Long postId) {
-        Like like = new Like(userId, postId);
-        likeRepository.save(like);
-    }
+    public List<Like> findLikesByPostId(Long postId) ;
 
-    @Transactional
-    public void unlikePost(Long userId, Long postId) {
-        Like like = likeRepository.findByUserIdAndPostId(userId, postId);
-        if (like != null) {
-            likeRepository.delete(like);
-        }
-    }
+    public boolean isPostLikedByUser(Long userId, Long postId) ;
 
-    public List<Like> findLikesByPostId(Long postId) {
-        return likeRepository.findByPostId(postId);
-    }
+    public Long countLikes(Long postId) ;
 
-    public boolean isPostLikedByUser(Long userId, Long postId) {
-        Like like = likeRepository.findByUserIdAndPostId(userId, postId);
-        return like != null;
-    }
+    // 切换点赞状态
+    public boolean toggleLike(Long postId, Long userId) ;
 }

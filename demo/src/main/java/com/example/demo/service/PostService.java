@@ -22,7 +22,11 @@ public interface  PostService {
 
     public Post getPostByPostId(Integer postid);
     public List<Post> getAllPosts();
+
     
+    public Long getLikeCount(Integer postId);
+
+    public List<Post> findHotPosts();
 }
 
 

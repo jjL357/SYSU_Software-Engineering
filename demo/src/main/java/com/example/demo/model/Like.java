@@ -8,9 +8,10 @@ public class Like {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
-    @Column(name = "user_id")
+    @Column(name = "uid")
     private Long userId;
 
     @Column(name = "post_id")

@@ -20,10 +20,9 @@
 
         .container {
             display: flex;
-            max-width: 1200px;
+            max-width: 1800px; /* 更宽的整体容器 */
             width: 100%;
             margin: 20px;
-            flex: 1;
             overflow: hidden;
         }
 
@@ -34,8 +33,9 @@
             border-radius: 10px;
             color: white;
             box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.75);
-            width: 40%;
+            width: 25%; /* 左右模块占比较小一点 */
             animation: fadeIn 1s ease-in-out;
+            min-height: 80vh; /* Minimum height for the profile container */
         }
 
         .profile-container h2 {
@@ -136,10 +136,11 @@
             border-radius: 10px;
             color: white;
             box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.75);
-            flex: 1;
+            flex: 1; /* 中间模块占比较大 */
             animation: fadeIn 1s ease-in-out;
             margin-left: 20px;
             overflow-y: auto;
+            min-height: 80vh; /* Minimum height for the posts container */
         }
 
         .posts-container h2 {
@@ -199,65 +200,45 @@
             align-items: center;
         }
 
-        .all-posts-container {
-            width: 80%;
-            max-width: 1200px;
-            margin: 20px;
-            padding: 20px;
+        .hot-posts-container {
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 40px;
             border-radius: 10px;
-            background-color: rgba(255, 255, 255, 0.8);
-            box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.1);
+            color: white;
+            box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.75);
+            width: 25%; /* 左右模块占比较小一点 */
+            animation: fadeIn 1s ease-in-out;
+            overflow-y: auto;
+            height: 80vh; /* Set the height as per your requirement */
+            min-height: 80vh; /* Minimum height for the hot posts container */
         }
 
-        .all-posts-container h2 {
+        .hot-posts-container h2 {
             margin-bottom: 20px;
             font-size: 24px;
             font-weight: bold;
             text-align: center;
         }
 
-        .all-post-item {
+        .hot-post-item {
             border-bottom: 1px solid #ddd;
             padding: 10px 0;
             position: relative;
         }
 
-        .all-post-item:last-child {
+        .hot-post-item:last-child {
             border-bottom: none;
         }
 
-        .all-post-item h3 {
+        .hot-post-item h3 {
             margin: 0;
-            font-size: 20px;
+            font-size: 18px;
             color: #ff4b5c;
         }
 
-        .all-post-item p {
+        .hot-post-item p {
             margin: 5px 0 0;
             color: #ccc;
-        }
-
-        .all-post-images {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-wrap: wrap;
-            margin-top: 10px;
-        }
-
-        .all-post-images img {
-            width: 100px;
-            height: 100px;
-            margin: 5px;
-            object-fit: cover;
-        }
-
-        .all-image-path {
-            width: 100%;
-            text-align: center;
-            font-size: 12px;
-            color: #888;
-            margin-top: 5px;
         }
     </style>
 </head>
@@ -274,25 +255,33 @@
             <div class="form-button-container">
                 <div class="upload-input">
                     <input type="file" name="avatar" accept="image/*" required onchange="document.getElementById('avatarForm').submit();">
-                    <label class="centered-text">上传并更换头像</label>
+                    <label class="centered-text">更换头像</label>
                 </div>
             </div>
         </form>
 
         <div class="form-button-container">
-            <a href="/createPost" class="button">发帖</a>
-            <a href="/myPosts" class="button">查看我的帖子</a>
-            <a href="/login" class="button">Logout</a>
+            <a href="/createPost" class="button">发帖子</a>
+            <a href="/myPosts" class="button">我的帖子</a>
+            <a href="/login" class="button">登出</a>
         </div>
     </div>
 
     <div class="posts-container">
         <h2>所有帖子</h2>
         <div th:each="post, postIndex : ${posts}" class="post-item">
-            <h3><a th:href="@{/post/{postId}(postId=${post.postId})}" th:text="${post.title}">Post Title</a></h3>            
+            <h3><a th:href="@{/post/{postId}/{userid}/(postId=${post.postId},userid=${user.uid})}" th:text="${post.title}">Post Title</a></h3>
         </div>
         <hr/>
     </div>
+
+    <div class="hot-posts-container">
+        <h2>热门帖子</h2>
+        <div th:each="post, postIndex : ${hotPosts}" class="hot-post-item">
+            <h3><a th:href="@{/post/{postId}/{userid}/(postId=${post.postId},userid=${user.uid})}" th:text="${postIndex.index + 1 + '. ' + post.title}">Post Title</a></h3>
+        </div>
+    </div>
 </div>
+
 </body>
 </html>

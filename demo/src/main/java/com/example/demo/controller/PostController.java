@@ -4,31 +4,21 @@ import com.example.demo.model.Post;
 import com.example.demo.model.User;
 import com.example.demo.service.PostService;
 import com.example.demo.service.UserService;
-
+import com.example.demo.service.LikeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-
 import javax.servlet.http.HttpSession;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-
-
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Controller
 public class PostController {
@@ -38,6 +28,9 @@ public class PostController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private LikeService likeService;
 
     private static final String UPLOAD_DIR = "src/main/resources/static/posts_photos";
 
@@ -56,7 +49,6 @@ public class PostController {
                              @RequestParam("files") List<MultipartFile> files,
                              HttpSession session,
                              Model model) throws IOException {
-        // 获取当前用户的ID
         User user = (User) session.getAttribute("user");
         if (user == null) {
             return "redirect:/login";
@@ -114,6 +106,7 @@ public class PostController {
 
         List<Post> posts = postService.getPostsByAuthorId(authorId);
         model.addAttribute("posts", posts);
+        model.addAttribute("user", user);
 
         // 构造帖子的图片路径 Map
         Map<Integer, List<String>> postPhotos = new HashMap<>();
@@ -138,10 +131,10 @@ public class PostController {
     @PostMapping("/deletePost/{postId}")
     public String deletePost(@PathVariable Integer postId, HttpSession session, Model model) {
         User user = (User) session.getAttribute("user");
-        
+
         // Check if the post belongs to the logged-in user
         Post post = postService.getPostByPostId(postId);
-        if (post == null ) {
+        if (post == null || !post.getAuthorId().equals(user.getUid())) {
             model.addAttribute("error", "无法删除帖子！");
             return "redirect:/myPosts";
         }
@@ -167,22 +160,28 @@ public class PostController {
         }
     }
 
-    @GetMapping("/post/{postId}")
-    public String viewPost(@PathVariable Integer postId, Model model) {
+    @GetMapping("/post/{postId}/{userid}")
+    public String viewPost(@PathVariable Integer postId,@PathVariable Integer userid,HttpSession session, Model model) {
+        User user = userService.findUserByUid(userid.longValue());
         Post post = postService.getPostByPostId(postId);
-        if (post == null) {
-            return "redirect:/error"; // 处理帖子不存在的情况
-        }
-    
-        Long authorId = post.getAuthorId();
-        User user = userService.findUserByUid(authorId); // 确保 UserService 有这个方法
+        
         if (user == null) {
             return "redirect:/error"; // 处理用户不存在的情况
         }
-    
+        Long authorId = post.getAuthorId();
+        User author = userService.findUserByUid(authorId); 
+        if (author == null) {
+            return "redirect:/error"; // 处理用户不存在的情况
+        }
+        
+        Long likeCount = likeService.countLikes(postId.longValue()); // 获取点赞数
+
+        boolean likedByUser = likeService.isPostLikedByUser( user.getUid(),postId.longValue());
+        model.addAttribute("author", author);
         model.addAttribute("user", user);
         model.addAttribute("post", post);
-    
+        model.addAttribute("likeCount", likeCount); // 将点赞数传递到模板
+        model.addAttribute("likedByUser", likedByUser); 
         // 构造帖子的图片路径 Map
         Map<Integer, List<String>> postPhotos = new HashMap<>();
         List<String> photos = new ArrayList<>();
@@ -202,4 +201,52 @@ public class PostController {
     }
     
 
+     @PostMapping("/likePost")
+    public ResponseEntity<String> likePost(@RequestParam Long postId, @RequestParam Long userId) {
+        // 根据 postId 和 userId 进行点赞或取消点赞操作
+        boolean liked = likeService.toggleLike(postId, userId);
+
+        if (liked) {
+            return ResponseEntity.ok("点赞成功");
+        } else {
+            return ResponseEntity.ok("取消点赞成功");
+        }
+    }
+
+    @GetMapping("/getLikeCount")
+    public ResponseEntity<Long> getLikeCount(@RequestParam Long postId) {
+        Long likeCount = likeService.countLikes(postId);
+        return ResponseEntity.ok(likeCount);
+    }
+    
+
+    @GetMapping("/countLikes")
+    @ResponseBody
+    public ResponseEntity<Long> countLikes(@RequestParam Long postId) {
+        Long likeCount = likeService.countLikes(postId);
+        return ResponseEntity.ok(likeCount);
+    }
+
+    @PostMapping("/processLikes/{postId}/{uid}")
+    public String processLikes(@PathVariable Long postId, @PathVariable Long uid, Model model, HttpSession session) {
+        // 根据 uid 查找用户
+        User user = userService.findUserByUid(uid);
+        if (user == null) {
+            // 处理未找到用户的情况，这里可以根据实际情况处理，比如跳转到错误页面或者其他逻辑
+            return "redirect:/register";
+        }
+
+        // 检查当前用户是否已经点赞过
+        boolean likedByUser = likeService.isPostLikedByUser(uid,postId);
+        if (likedByUser) {
+            // 如果已经点赞过，则取消点赞
+            likeService.unlikePost(uid,postId);
+        } else {
+            // 如果未点赞，则点赞
+            likeService.likePost(uid,postId);
+        }
+
+        // 重定向到帖子详情页面，这里根据实际情况修改重定向的路径
+       return "redirect:/post/" + postId + "/" + uid;
+    }
 }
