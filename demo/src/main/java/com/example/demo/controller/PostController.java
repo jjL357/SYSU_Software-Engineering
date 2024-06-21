@@ -3,10 +3,12 @@ import com.example.demo.repository.*;
 import com.example.demo.dao.LikeDAO;
 import com.example.demo.model.Post;
 import com.example.demo.model.User;
+import com.example.demo.model.Comment;
 import com.example.demo.repository.PostRepository;
 import com.example.demo.service.PostService;
 import com.example.demo.service.UserService;
 import com.example.demo.service.LikeService;
+import com.example.demo.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +22,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Controller
@@ -33,6 +36,9 @@ public class PostController {
 
     @Autowired
     private LikeService likeService;
+
+    @Autowired
+    private CommentService commentService;
 
     @Autowired
     private LikeDAO likeDAO;
@@ -190,6 +196,11 @@ public class PostController {
         model.addAttribute("post", post);
         model.addAttribute("likeCount", likeCount); // 将点赞数传递到模板
         model.addAttribute("likedByUser", likedByUser); 
+        
+        List <Comment> comments = commentService.getAllCommentsByPostId(postId.longValue()); 
+        model.addAttribute("comments", comments); 
+        
+        
         // 构造帖子的图片路径 Map
         Map<Integer, List<String>> postPhotos = new HashMap<>();
         List<String> photos = new ArrayList<>();
@@ -283,4 +294,24 @@ public class PostController {
         //return "redirect:/login";
         return "like_posts"; // 返回HTML模板名称
     }
+
+    @PostMapping("/comment/{postId}/{uid}")
+    public String processComment(@RequestParam String content,@PathVariable Long postId, @PathVariable Long uid, Model model, HttpSession session) {
+        // 根据 uid 查找用户
+        User user = userService.findUserByUid(uid);
+        if (user == null) {
+            // 处理未找到用户的情况，这里可以根据实际情况处理，比如跳转到错误页面或者其他逻辑
+            return "redirect:/register";
+        }
+
+        Comment comment = new Comment(postId, 0L, uid, content);
+        commentService.saveComment(comment);
+        
+        // 重定向到帖子详情页面，这里根据实际情况修改重定向的路径
+       return "redirect:/post/" + postId + "/" + uid;
+    }
+
+
+
+
 }

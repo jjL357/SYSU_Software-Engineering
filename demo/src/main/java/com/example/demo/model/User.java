@@ -20,7 +20,7 @@ public class User {
 
     private String avatar;
 
-    // getters and setters
+ 
 
     public Long getUid() {
         return uid;
