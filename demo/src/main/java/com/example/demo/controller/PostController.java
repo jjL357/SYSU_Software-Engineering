@@ -1,7 +1,9 @@
 package com.example.demo.controller;
-
+import com.example.demo.repository.*;
+import com.example.demo.dao.LikeDAO;
 import com.example.demo.model.Post;
 import com.example.demo.model.User;
+import com.example.demo.repository.PostRepository;
 import com.example.demo.service.PostService;
 import com.example.demo.service.UserService;
 import com.example.demo.service.LikeService;
@@ -31,6 +33,12 @@ public class PostController {
 
     @Autowired
     private LikeService likeService;
+
+    @Autowired
+    private LikeDAO likeDAO;
+
+    @Autowired
+    private PostRepository postRepository;
 
     private static final String UPLOAD_DIR = "src/main/resources/static/posts_photos";
 
@@ -248,5 +256,31 @@ public class PostController {
 
         // 重定向到帖子详情页面，这里根据实际情况修改重定向的路径
        return "redirect:/post/" + postId + "/" + uid;
+    }
+
+    @GetMapping("/likedPosts")
+    public String likedPosts(Model model, HttpSession session) {
+        // 获取当前登录的用户
+        User user = (User) session.getAttribute("user");
+
+        if (user == null) {
+            // 如果用户未登录，重定向到登录页面或其他处理
+            return "redirect:/login";
+        }
+
+        // 获取用户点赞过的帖子ID列表
+        List<Long> likedPostIds = likeDAO.getLikedPosts(user);
+
+        // 获取点赞过的帖子详细信息
+        List<Post> likedPosts = new ArrayList<>();
+        for (Long id : likedPostIds) {
+            likedPosts.add(postRepository.findByPostId(id.intValue()));
+        }
+
+        // 将点赞过的帖子列表传递到模板中
+        model.addAttribute("likedPosts", likedPosts);
+        model.addAttribute("user", user);
+        //return "redirect:/login";
+        return "like_posts"; // 返回HTML模板名称
     }
 }

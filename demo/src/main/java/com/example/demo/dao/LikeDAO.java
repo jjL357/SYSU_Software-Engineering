@@ -1,7 +1,7 @@
 package com.example.demo.dao;
 
 import java.util.List;
-
+import com.example.demo.model.User;
 public interface LikeDAO {
 
     void likePost(Long postId, Long userId);
@@ -9,4 +9,6 @@ public interface LikeDAO {
     Long countLikes(Long postId);
 
     public List<Object[]> findTop10HotPosts();
+
+    public List<Long> getLikedPosts(User user);
 }

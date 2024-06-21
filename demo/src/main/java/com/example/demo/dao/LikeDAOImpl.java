@@ -1,5 +1,5 @@
 package com.example.demo.dao;
-
+import com.example.demo.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -32,5 +32,14 @@ public class LikeDAOImpl implements LikeDAO {
                      "LIMIT 10";
         return jdbcTemplate.query(sql, (resultSet, i) ->
                 new Object[]{resultSet.getLong("post_id"), resultSet.getLong("likeCount")});
+    }
+
+    @Override
+    public List<Long>  getLikedPosts(User user) {
+        Long uid = user.getUid();
+        String sql = "SELECT post_id " +
+                     "FROM likes " +
+                     "WHERE uid = ?";
+        return jdbcTemplate.queryForList(sql, Long.class, uid);
     }
 }

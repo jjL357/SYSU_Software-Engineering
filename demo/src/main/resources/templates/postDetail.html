@@ -128,7 +128,7 @@
 <div class="container">
     <h2 th:text="${post.title}">Post Title</h2>
     <div class="author-info">
-        <img th:src="@{'/avatar/' + ${author.avatar}}" alt="Author Avatar">
+        <img th:src="${author.avatar != null ? '/avatar/' + author.avatar : '/avatar/0.jpg'}" alt="Author Avatar">
         <span>作者: <span th:text="${author.name}">Author Name</span></span>
     </div>
     <div class="post-content">
