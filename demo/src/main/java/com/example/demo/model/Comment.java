@@ -114,4 +114,8 @@ public class Comment {
     public void setChildren(List<Comment> children) {
         this.children = children;
     }
+
+    public void addChildren(Comment child) {
+        this.children.add(child);
+    }
 }

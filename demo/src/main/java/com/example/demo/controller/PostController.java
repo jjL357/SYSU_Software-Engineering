@@ -311,6 +311,24 @@ public class PostController {
        return "redirect:/post/" + postId + "/" + uid;
     }
 
+    @PostMapping("/reply/{postId}/{parentId}/{uid}")
+    public String replyComment(@RequestParam String content,@PathVariable Long postId, @PathVariable Long parentId,@PathVariable Long uid, Model model, HttpSession session) {
+        // 根据 uid 查找用户
+        User user = userService.findUserByUid(uid);
+        if (user == null) {
+            // 处理未找到用户的情况，这里可以根据实际情况处理，比如跳转到错误页面或者其他逻辑
+            return "redirect:/register";
+        }
+
+        Comment comment = new Comment(-1L, parentId, uid, content);
+        commentService.saveComment(comment);
+        Comment parent = commentService.getCommentById(parentId);
+        parent.addChildren(parent);
+
+        // 重定向到帖子详情页面，这里根据实际情况修改重定向的路径
+       return "redirect:/post/" + postId + "/" + uid;
+    }
+
 
 
 
