@@ -51,7 +51,7 @@ public class LoginController {
     public String userProfile(Model model, HttpSession session) {
         User user = (User) session.getAttribute("user");
         List<Post> posts = postService.getAllPosts();
-        List<Post> hotPosts = postService.findHotPosts(); // 假设这里是获取点赞率最高的十个帖子的方法
+        List<Post> hotPosts = postService.findHotPosts(); // 假设这里是获取点赞率最高的15个帖子的方法
         model.addAttribute("hotPosts", hotPosts);
         model.addAttribute("posts", posts);
         if (user != null) {

@@ -24,7 +24,7 @@ public class LikeDAOImpl implements LikeDAO {
     }
 
     @Override
-    public List<Object[]> findTop10HotPosts() {
+    public List<Object[]> findTop15HotPosts() {
         String sql = "SELECT post_id, COUNT(*) AS likeCount " +
                      "FROM likes " +
                      "GROUP BY post_id " +

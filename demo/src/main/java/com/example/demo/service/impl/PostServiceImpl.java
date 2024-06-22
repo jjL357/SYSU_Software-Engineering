@@ -52,7 +52,7 @@ public class PostServiceImpl implements PostService {
     }
 
     public List<Post> findHotPosts() {
-        List<Object []> hotPostsWithLikes = likeDAO.findTop10HotPosts();
+        List<Object []> hotPostsWithLikes = likeDAO.findTop15HotPosts();
         // Transforming the result into Post objects
         List<Post> hotPosts = new ArrayList<>();
         for (Object [] result : hotPostsWithLikes) {

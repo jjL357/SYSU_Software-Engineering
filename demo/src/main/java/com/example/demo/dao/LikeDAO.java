@@ -8,7 +8,7 @@ public interface LikeDAO {
 
     Long countLikes(Long postId);
 
-    public List<Object[]> findTop10HotPosts();
+    public List<Object[]> findTop15HotPosts();
 
     public List<Long> getLikedPosts(User user);
 }
