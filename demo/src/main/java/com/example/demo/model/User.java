@@ -18,6 +18,12 @@ public class User {
     @Column(nullable = false)
     private String email;
 
+    @Column(nullable = false)
+    private Integer is_admin;
+
+
+    
+
     private String avatar;
 
  
@@ -48,6 +54,10 @@ public class User {
 
     public String getEmail() {
         return email;
+    }
+
+    public Integer getIsAdmin() {
+        return is_admin;
     }
 
     public void setEmail(String email) {
