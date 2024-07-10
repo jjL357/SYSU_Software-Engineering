@@ -86,14 +86,14 @@ public class LoginController {
     public String deletePost(@PathVariable Integer postId, HttpSession session, Model model) {
         User user = (User) session.getAttribute("user");
         session.setAttribute("user", user);
-        // Check if the post belongs to the logged-in user
+        
         Post post = postService.getPostByPostId(postId);
         if (post == null ) {
             model.addAttribute("error", "无法删除帖子！");
             return "redirect:/admin";
         }
 
-        // Delete post and related photos
+        
         postService.deletePost(postId);
         deletePostPhotos(postId);
 
@@ -120,7 +120,7 @@ public class LoginController {
     public String userProfile(Model model, HttpSession session) {
         User user = (User) session.getAttribute("user");
         List<Post> posts = postService.getAllPosts();
-        List<Post> hotPosts = postService.findHotPosts(); // 假设这里是获取点赞率最高的15个帖子的方法
+        List<Post> hotPosts = postService.findHotPosts(); // 获取点赞率最高的帖子
         model.addAttribute("hotPosts", hotPosts);
         model.addAttribute("posts", posts);
         if (user != null) {
@@ -141,7 +141,7 @@ public class LoginController {
             File file = new File(uploadDir, filename);
             avatar.transferTo(file);
             user.setAvatar(filename);
-            userService.updateUser(user); // Ensure this method exists to update user info
+            userService.updateUser(user); 
         }
         return "redirect:/userProfile";
     }

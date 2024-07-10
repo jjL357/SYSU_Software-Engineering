@@ -104,7 +104,7 @@ public class PostController {
                 Path filePath = Paths.get(postDir, filename);
                 Files.write(filePath, file.getBytes());
 
-                // Increment count after successful upload
+                
                 count++;
             }
         }
@@ -146,14 +146,14 @@ public class PostController {
     public String deletePost(@PathVariable Integer postId, HttpSession session, Model model) {
         User user = (User) session.getAttribute("user");
 
-        // Check if the post belongs to the logged-in user
+
         Post post = postService.getPostByPostId(postId);
         if (post == null || !post.getAuthorId().equals(user.getUid())) {
             model.addAttribute("error", "无法删除帖子！");
             return "redirect:/myPosts";
         }
 
-        // Delete post and related photos
+ 
         postService.deletePost(postId);
         deletePostPhotos(postId);
 
